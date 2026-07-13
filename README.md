@@ -70,13 +70,13 @@ Wazuh Dashboard
 
 | Exercise | MITRE ATT&CK Technique | Status |
 |-----------|------------------------|--------|
-| Discovery | T1087, T1033 | ✅ |
-| Failed Login Detection | Authentication | ✅ |
-| PowerShell Execution | T1059 | ✅ |
-| File Integrity Monitoring | FIM | ✅ |
-| Registry Persistence | T1547 | ✅ |
-| Administrator Group Modification | T1098 | ✅ |
-| Scheduled Task Persistence | T1053 | ✅ |
+| Discovery | T1087, T1033 | Done |
+| Failed Login Detection | Authentication | Done |
+| PowerShell Execution | T1059 | Done |
+| File Integrity Monitoring | FIM | Done |
+| Registry Persistence | T1547 | Done |
+| Administrator Group Modification | T1098 | Done |
+| Scheduled Task Persistence | T1053 | Done |
 
 ---
 
