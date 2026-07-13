@@ -136,19 +136,6 @@ Wazuh-SOC-Home-Lab/
 └── sysmon/
 ```
 
----
-
-## Future Improvements
-
-- Add Active Directory integration
-- Build a multi-endpoint SOC lab
-- Create custom Wazuh detection rules
-- Develop custom Sysmon configurations
-- Simulate additional MITRE ATT&CK techniques
-- Integrate threat intelligence feeds
-
----
-
 ## Author
 
 **Hafsah Yasir**
