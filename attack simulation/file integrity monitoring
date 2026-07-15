@@ -1,0 +1,51 @@
+# File Integrity Monitoring (FIM)
+
+## Objective
+When an attacker breaches a system, one of the first things they might do is:
+- Modify a configuration file
+- Change a password file
+- Replace a program with malware
+- Delete important logs
+- Create a malicious script
+
+File Integrity Monitoring (FIM) watches important files/folders and alerts on **creation, modification, deletion, or renaming**.
+
+## Setup
+By default, Wazuh only monitors predefined directories (system folders, etc.) — not every folder on Windows. Since `C:\SOC-Lab` was a new custom folder, it had to be added explicitly to the agent's `<syscheck>` configuration before FIM would report on it.
+
+**Steps taken:**
+1. Opened Notepad **as Administrator**.
+2. Opened the Wazuh agent's `ossec.conf`.
+3. Located the `<syscheck>` section.
+4. Added `C:\SOC-Lab` as a monitored directory (realtime).
+5. Saved the file.
+6. Restarted the Wazuh Agent: `Restart-Service WazuhSvc`
+
+## Commands Run
+
+| # | Command | Purpose |
+|---|---|---|
+| 1 | `New-Item -ItemType Directory -Path C:\SOC-Lab -Force` | Creates the monitored folder |
+| 2 | `New-Item -ItemType File -Path C:\SOC-Lab\test.txt -Force` | Creates an empty test file |
+| 3 | `Set-Content C:\SOC-Lab\test.txt "Hello Wazuh"` | Writes initial content |
+| 4 | `Set-Content C:\SOC-Lab\test.txt "Hello Wazuh - Modified"` | Modifies the file — should trigger a modification event |
+| 5 | `Remove-Item C:\SOC-Lab\test.txt` | Deletes the file — should trigger a "file deleted" event |
+
+## Investigation — Wazuh Alert
+
+| Field | Value |
+|---|---|
+| agent.name | Windows11 |
+| full_log | `File 'c:\soc-lab\test.txt' deleted Mode: realtime` |
+| rule.description | File deleted. |
+| rule.id | 553 |
+| rule.level | 7 |
+| syscheck.path | c:\soc-lab\test.txt |
+| syscheck.md5_after | 91967a60200e895f085a805a3933a303 |
+| syscheck.sha256_after | ae2697b447a683713584db0d9f18422485164248abbea2c5de3a20886f688b30 |
+| timestamp | Jul 6, 2026 @ 17:21:09.221 |
+
+Related rule IDs observed during this test: **550** (integrity checksum changed), **554** (file added to the system), **553** (file deleted).
+
+## Takeaway
+FIM only works on directories explicitly configured in `<syscheck>` — a folder invisible to Wazuh generates zero alerts even if heavily tampered with. Configuration scope directly determines detection coverage.
