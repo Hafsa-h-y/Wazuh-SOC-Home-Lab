@@ -1,0 +1,20 @@
+<!--
+  Sanitized excerpt from the Wazuh Agent's ossec.conf on Windows11.
+  This is the <syscheck> section modified to enable File Integrity Monitoring
+  on the custom C:\SOC-Lab test directory (realtime mode).
+
+  Location on the Windows agent:
+   "C:\Program Files (x86)\ossec-agent\ossec.conf"
+
+  After editing, restart the agent:
+    Restart-Service WazuhSvc
+-->
+
+<syscheck>
+  <disabled>no</disabled>
+
+  <!-- Existing default monitored paths remain above/below this line -->
+
+  <directories realtime="yes" report_changes="yes" check_all="yes">C:\SOC-Lab</directories>
+
+</syscheck>
