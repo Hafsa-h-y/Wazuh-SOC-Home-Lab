@@ -1,0 +1,46 @@
+# Detection Rules Observed
+
+These are the Wazuh rule IDs, levels, and descriptions that fired during lab testing, pulled directly from the Threat Hunting view. Rule levels indicate severity as configured in this Wazuh instance (higher = more severe).
+
+| Rule ID | Level | Description | Simulation |
+|---|---|---|---|
+| 92031 | 3 | Discovery activity executed | Account Discovery |
+| 92033 | 3 | Discovery activity spawned via powershell execution | Account Discovery / PowerShell Execution |
+| 92039 | 3 | A net.exe account discovery command was initiated | Account Discovery / Privilege Escalation |
+| 92052 | 4 | Windows command prompt started by an abnormal process | PowerShell Execution |
+| 92032 | 3 | Suspicious Windows cmd shell execution | CMD Execution |
+| 92004 | 4 | Powershell process spawned Windows command shell instance | CMD Execution |
+| 550 | 7 | Integrity checksum changed | File Integrity Monitoring |
+| 553 | 7 | File deleted | File Integrity Monitoring |
+| 554 | 5 | File added to the system | File Integrity Monitoring |
+| 92041 | 10 | Value added to registry key has Base64-like pattern | Persistence |
+| 60154 | 12 | Administrators Group Changed | Privilege Escalation |
+| 61060 | 5 | The open procedure for service remote access failed | (background/system noise) |
+| 60106 | 3 | Windows Logon Success | (background/system noise) |
+
+> **Note:** These are rule IDs/levels/descriptions as displayed by the Wazuh Dashboard during testing — not the raw rule XML. To get the actual rule logic behind these IDs, pull the corresponding entries from your Wazuh Manager, e.g.:
+> ```bash
+> sudo grep -r "92041" /var/ossec/ruleset/rules/
+> sudo grep -r "92041" /var/ossec/etc/rules/local_rules.xml
+> ```
+> Copy the matched `<rule>` blocks into `detection-rules/local_rules.xml` (sanitized of any host-specific info) so the repo shows your actual detection logic, not just the dashboard output.
+
+## Custom Rules Template
+Use this as the starting shell for any custom rules you write going forward — save as `detection-rules/local_rules.xml`:
+
+```xml
+<!-- Local rules — placed in /var/ossec/etc/rules/local_rules.xml -->
+<!-- Group IDs 100000-999999 are reserved for custom/local rules -->
+
+<group name="local,syslog,sshd,">
+
+  <rule id="100100" level="10">
+    <if_group>syscheck</if_group>
+    <field name="file">SOC-Lab</field>
+    <description>Custom: Change detected inside the C:\SOC-Lab monitored test directory</description>
+  </rule>
+
+  <!-- Add additional custom rules here as you build them -->
+
+</group>
+```
