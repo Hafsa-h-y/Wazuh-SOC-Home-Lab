@@ -1,0 +1,33 @@
+# Suspicious Command Prompt (CMD) Execution
+
+## Objective
+Attackers rarely use the Windows graphical interface — they prefer `cmd.exe` because it allows fast command execution. For example, an attacker may use CMD to:
+- Create a new user
+- Delete files
+- Download malware
+- Change passwords
+- Disable antivirus
+- Run scripts
+
+Because of this, Wazuh pays close attention whenever `cmd.exe` starts.
+
+## Commands Run
+Ran `cmd` as administrator, then executed:
+- `whoami`
+- `hostname`
+- `dir`
+- `ipconfig`
+
+## Investigation — Wazuh Alert
+
+| Field | Value |
+|---|---|
+| agent.name | Windows11 |
+| data.win.eventdata.commandLine | `\??\C:\WINDOWS\system32\conhost.exe 0xffffffff -ForceV1` |
+| rule.id | 92032 |
+| rule.level | 3 |
+| rule.description | Suspicious Windows cmd shell execution |
+| timestamp | Jul 5, 2026 @ 21:10:32.920 |
+
+## Takeaway
+Wazuh treats `cmd.exe` spawning as a signal worth flagging on its own, separate from the individual commands run inside it — an example of behavioral detection (process ancestry / shell execution) rather than pure command-string matching.
