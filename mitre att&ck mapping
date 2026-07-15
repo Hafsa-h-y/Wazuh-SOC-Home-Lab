@@ -1,0 +1,22 @@
+# MITRE ATT&CK Mapping
+
+Mapping each simulated activity in this lab to its corresponding MITRE ATT&CK technique.
+
+| Simulation | Command(s) | Technique | Technique ID |
+|---|---|---|---|
+| Account Discovery | `whoami` | System Owner/User Discovery | T1033 |
+| Account Discovery | `hostname` | System Information Discovery | T1082 |
+| Account Discovery | `net user` | Account Discovery: Local Account | T1087.001 |
+| Account Discovery | `net localgroup administrators` | Permission Groups Discovery: Local Groups | T1069.001 |
+| Account Discovery | `ipconfig` | System Network Configuration Discovery | T1016 |
+| PowerShell Execution | `Get-Process` | Process Discovery | T1057 |
+| PowerShell Execution | `Get-Service` | System Service Discovery | T1007 |
+| PowerShell Execution | `Get-ChildItem C:\` | File and Directory Discovery | T1083 |
+| PowerShell Execution | `Get-LocalUser` | Account Discovery: Local Account | T1087.001 |
+| PowerShell/CMD Execution | Command/PowerShell interpreter use | Command and Scripting Interpreter | T1059 / T1059.001 (PowerShell) / T1059.003 (Windows Command Shell) |
+| File Integrity Monitoring | File create/modify/delete in `C:\SOC-Lab` | Indicator Removal / File Manipulation (generic FIM coverage) | T1070 |
+| Persistence | Registry Run key (`HKCU...\Run`) | Boot or Logon Autostart Execution: Registry Run Keys | T1547.001 |
+| Privilege Escalation | `net user /add` + `net localgroup Administrators /add` | Create Account: Local Account | T1136.001 |
+| Privilege Escalation | Adding account to Administrators group | Valid Accounts: Local Accounts (privilege abuse) | T1078.003 |
+
+> This mapping is intended as a learning reference — it connects the commands run in this lab to the broader ATT&CK framework used across the industry for threat modeling and detection engineering.
