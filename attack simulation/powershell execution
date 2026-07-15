@@ -1,0 +1,27 @@
+# PowerShell Execution
+
+## Objective
+Simulate discovery-style reconnaissance using native PowerShell cmdlets instead of classic `cmd.exe` commands, to see how Wazuh handles PowerShell-based activity.
+
+## Commands Run
+
+| # | Command | Purpose |
+|---|---|---|
+| 1 | `Get-Process` | Lists every running process — attacker checks whether antivirus/security tools are active |
+| 2 | `Get-Service` | Lists Windows services (Defender, SQL Server, backup software, RDP, etc.) |
+| 3 | `Get-ChildItem C:\` | Lists files/folders on the C: drive to understand the file system |
+| 4 | `Get-LocalUser` | Lists local user accounts, including admin/disabled accounts |
+
+## Investigation — Wazuh Alert
+
+| Field | Value |
+|---|---|
+| agent.name | Windows11 |
+| data.win.eventdata.commandLine | `cmd.exe /C echo.%UserProfile%` |
+| data.win.eventdata.utcTime | 2026-07-04 19:52:11.400 |
+| rule.description | Windows command prompt started by an abnormal process |
+| rule.id | 92052 |
+| rule.level | 4 |
+
+## Takeaway
+PowerShell-driven discovery still surfaces in Wazuh via process-spawn and command-line telemetry — reinforcing that Sysmon's process creation logging (Event ID 1) is what makes this kind of detection possible, regardless of which shell the attacker uses.
