@@ -1,0 +1,38 @@
+# Privilege Escalation
+
+## Objective
+Simulate an attacker escalating a compromised low-privilege account to full administrator rights by creating a new account and adding it to the local Administrators group.
+
+## Commands Run
+
+| Step | Command | Purpose |
+|---|---|---|
+| 1 | `whoami` / `net user %USERNAME%` | Check current account and group memberships |
+| 2 | `net user SOCLabUser P@ssw0rd123! /add` | Creates a harmless local test account |
+| 3 | `net localgroup Administrators SOCLabUser /add` | **Simulated privilege escalation** — adds the account to Administrators |
+| 4 | `net localgroup Administrators` | Verifies `SOCLabUser` now appears as an administrator |
+
+**Clean-up:**
+```
+net localgroup Administrators SOCLabUser /delete
+net user SOCLabUser /delete
+```
+
+## What to Look For in Wazuh
+- User added to a local group
+- Administrator group modified
+- Windows Security Event IDs: **4720** (user created), **4732** (member added to a local group)
+
+## Investigation — Wazuh Alert
+
+| Field | Value |
+|---|---|
+| agent.name | Windows11 |
+| rule.description | Administrators Group Changed |
+| rule.id | 60154 |
+| rule.level | 12 |
+| timestamp | Jul 9, 2026 @ 14:55:35.524 |
+| data.win.system.eventID | 4732 |
+
+## Takeaway
+This produced the highest-severity alert in the lab (level 12) — modifying the Administrators group is treated as one of the most critical events Wazuh watches for, since it directly grants elevated access.
