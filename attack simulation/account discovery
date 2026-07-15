@@ -1,0 +1,41 @@
+# Account Discovery Attack
+
+## Objective
+Simulated the first thing an attacker usually does after gaining access to a computer. The attacker asks questions like:
+- Who am I?
+- What users exist?
+- Who is an administrator?
+- What computer am I on?
+
+This is called **Discovery**. Attackers don't immediately install malware or steal files — first, they learn about the system so they can plan their next move.
+
+## Commands Run
+
+| # | Command | Purpose |
+|---|---|---|
+| 1 | `whoami` | Tells the attacker which user account they're currently using |
+| 2 | `hostname` | Identifies the machine name |
+| 3 | `net user` | Lists all user accounts on the computer |
+| 4 | `net localgroup administrators` | Lists accounts with the highest privileges |
+| 5 | `ipconfig` | Reveals the network configuration |
+
+## Investigation — Wazuh Alert
+
+**Alert 1**
+| Field | Value |
+|---|---|
+| agent.name | Windows11 |
+| data.win.eventdata.commandLine | `"C:\WINDOWS\system32\net.exe" user` |
+| rule.description | Discovery activity executed |
+
+**Alert 2**
+| Field | Value |
+|---|---|
+| agent.name | Windows11 |
+| data.win.eventdata.utcTime | 2026-07-04 19:37:05.823 |
+| rule.id | 92033 |
+| rule.level | 3 |
+| rule.description | Discovery activity spawned via powershell execution |
+
+## Takeaway
+`net user` triggered **"Discovery Activity Executed"** because Wazuh recognized it as a potential attacker reconnaissance technique — confirming that detection rules, not raw activity, decide what becomes an alert.
