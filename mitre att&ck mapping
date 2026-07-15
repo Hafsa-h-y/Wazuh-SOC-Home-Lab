@@ -1,22 +1,57 @@
 # MITRE ATT&CK Mapping
 
-Mapping each simulated activity in this lab to its corresponding MITRE ATT&CK technique.
+## Overview
 
-| Simulation | Command(s) | Technique | Technique ID |
-|---|---|---|---|
-| Account Discovery | `whoami` | System Owner/User Discovery | T1033 |
-| Account Discovery | `hostname` | System Information Discovery | T1082 |
-| Account Discovery | `net user` | Account Discovery: Local Account | T1087.001 |
-| Account Discovery | `net localgroup administrators` | Permission Groups Discovery: Local Groups | T1069.001 |
-| Account Discovery | `ipconfig` | System Network Configuration Discovery | T1016 |
-| PowerShell Execution | `Get-Process` | Process Discovery | T1057 |
-| PowerShell Execution | `Get-Service` | System Service Discovery | T1007 |
-| PowerShell Execution | `Get-ChildItem C:\` | File and Directory Discovery | T1083 |
-| PowerShell Execution | `Get-LocalUser` | Account Discovery: Local Account | T1087.001 |
-| PowerShell/CMD Execution | Command/PowerShell interpreter use | Command and Scripting Interpreter | T1059 / T1059.001 (PowerShell) / T1059.003 (Windows Command Shell) |
-| File Integrity Monitoring | File create/modify/delete in `C:\SOC-Lab` | Indicator Removal / File Manipulation (generic FIM coverage) | T1070 |
-| Persistence | Registry Run key (`HKCU...\Run`) | Boot or Logon Autostart Execution: Registry Run Keys | T1547.001 |
-| Privilege Escalation | `net user /add` + `net localgroup Administrators /add` | Create Account: Local Account | T1136.001 |
-| Privilege Escalation | Adding account to Administrators group | Valid Accounts: Local Accounts (privilege abuse) | T1078.003 |
+One of the primary objectives of this SOC Home Lab was not only to generate security alerts, but also to understand how real attacker behavior maps to the MITRE ATT&CK Framework.
 
-> This mapping is intended as a learning reference — it connects the commands run in this lab to the broader ATT&CK framework used across the industry for threat modeling and detection engineering.
+MITRE ATT&CK is a globally recognized knowledge base used by Security Operations Centers (SOCs), threat hunters, incident responders, and detection engineers. Each attack technique has a unique Technique ID that allows defenders to classify attacker behavior and create better detections.
+
+The table below shows how each activity performed during this project maps to the ATT&CK framework.
+
+---
+
+## ATT&CK Mapping
+
+| Lab Activity | Command Used | MITRE Technique | Technique ID |
+|--------------|-------------|-----------------|--------------|
+| Display current user | `whoami` | System Owner/User Discovery | **T1033** |
+| Display computer name | `hostname` | System Information Discovery | **T1082** |
+| Enumerate local users | `net user` | Account Discovery: Local Account | **T1087.001** |
+| Enumerate Administrators group | `net localgroup administrators` | Permission Groups Discovery: Local Groups | **T1069.001** |
+| Display network configuration | `ipconfig` | System Network Configuration Discovery | **T1016** |
+| List running processes | `Get-Process` | Process Discovery | **T1057** |
+| Enumerate services | `Get-Service` | System Service Discovery | **T1007** |
+| Browse files and folders | `Get-ChildItem C:\` | File and Directory Discovery | **T1083** |
+| Enumerate local accounts | `Get-LocalUser` | Account Discovery | **T1087.001** |
+| Execute PowerShell commands | PowerShell | Command and Scripting Interpreter: PowerShell | **T1059.001** |
+| Execute CMD commands | Command Prompt | Command and Scripting Interpreter: Windows Command Shell | **T1059.003** |
+| Create, modify and delete monitored files | `C:\SOC-Lab` | Indicator Removal / File Manipulation | **T1070** |
+| Create Registry Run Key | `HKCU\Software\Microsoft\Windows\CurrentVersion\Run` | Boot or Logon Autostart Execution | **T1547.001** |
+| Create a local user | `net user SOCAdmin Pass123! /add` | Create Account: Local Account | **T1136.001** |
+| Add user to Administrators group | `net localgroup administrators SOCAdmin /add` | Valid Accounts: Local Accounts | **T1078.003** |
+
+---
+
+## What I Learned
+
+During this project I learned how common Windows commands used by both administrators and attackers are mapped to the MITRE ATT&CK framework.
+
+I also learned that:
+
+- Wazuh generates alerts based on detection rules rather than every command executed.
+- A single command can belong to one or more MITRE ATT&CK techniques.
+- Security analysts use ATT&CK mappings to understand attacker objectives and investigate incidents more efficiently.
+- Detection rules help classify attacker behavior into standardized techniques used across the cybersecurity industry.
+
+---
+
+## Skills Demonstrated
+
+- MITRE ATT&CK Framework
+- Threat Hunting
+- Windows Security Monitoring
+- Wazuh SIEM
+- Security Event Analysis
+- Detection Engineering
+- Incident Investigation
+- Windows Event Logging
